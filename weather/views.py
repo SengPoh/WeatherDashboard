@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
+from django.http import JsonResponse
 
 from weather.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from weather.helpers import login_prohibited
@@ -154,6 +155,17 @@ class SignUpView(LoginProhibitedMixin, FormView):
     def get_success_url(self):
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
 
-def weather_view(request):
-    weather = get_weather()
-    return render(request, 'weather.html', {'weather': weather})
+def weather_api(request):
+    if request.method == 'GET':
+        city = request.GET.get('city')
+        weather = get_weather(city)
+        return JsonResponse(weather)
+
+class WeatherView(LoginRequiredMixin, View):
+    http_method_names = ['get']
+    
+    def get(self, request):
+        return self.render(request)
+
+    def render(self, request):
+        return render(request, 'weather.html')

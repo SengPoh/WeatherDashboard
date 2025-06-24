@@ -6,17 +6,45 @@
     </title>
 </head>
 <body>
-    <h1>Weather</h1>
+    <h1>Check Weather</h1>
 
-    {% if weather.error %}
-    <p style="color:red;">weather.error</p>
-    {% else %} 
-    <ul>
-        <li><strong>Description: </strong>{{ Weather.description }}</li>    
-        <li><strong>Temperature: </strong>{{ Weather.temperature }}</li>   
-        <li><strong>Description: </strong>{{ Weather.description }}</li>   
-    </ul>
-    {% endif %}
+    <input type="text" id="cityInput" placeholder="Enter City">
+    <button onclick="getWeather()">Get Weather</button>
+
+    <div id = "weatherResult"></div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById("cityInput").value.trim();
+
+            if (!city) {
+                document.getElementById("weatherResult").innerText = "Please enter city name.";
+                return;
+            } 
+
+            fetch(`/api/weather/?city=${encodeURIComponent(city)}`)
+                .then(response=>response.json())
+                .then(data=> {
+                    if(data.error) {
+                        document.getElementById("weatherResult").innerText = `There is an error: '${data.error}'`;
+                        return;
+                    } else {
+                        document.getElementById("weatherResult").innerHTML = `
+                            <h3>Weather in ${city}</h3>
+                            <ul>
+                                <li><strong>Description:</strong> ${data.description}</li>
+                                <li><strong>Temperature:</strong> ${data.temperature}°C</li>
+                                <li><strong>Feels like:</strong> ${data.feels_like}°C</li>
+                            </ul>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("weatherResult").innerText = `Failed to fetch weather in ${city}`
+                })
+
+        }
+    </script>
 </body>
 
 </html>

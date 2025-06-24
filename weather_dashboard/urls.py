@@ -27,5 +27,7 @@ urlpatterns = [
     path('password/', views.PasswordView.as_view(), name='password'),
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
-    path('weather/', views.weather_view, name='weather'),
+
+    path('api/weather/', views.weather_api, name='weather_api'),
+    path('weather/', views.WeatherView.as_view(), name='weather')
 ]
