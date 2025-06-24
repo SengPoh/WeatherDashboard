@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Weather Dashboard
+    </title>
+</head>
+<body>
+    <h1>Weather</h1>
+
+    {% if weather.error %}
+    <p style="color:red;">weather.error</p>
+    {% else %} 
+    <ul>
+        <li><strong>Description: </strong>{{ Weather.description }}</li>    
+        <li><strong>Temperature: </strong>{{ Weather.temperature }}</li>   
+        <li><strong>Description: </strong>{{ Weather.description }}</li>   
+    </ul>
+    {% endif %}
+</body>
+
+</html>
